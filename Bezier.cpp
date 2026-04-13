@@ -1,4 +1,4 @@
-﻿enum eVertexArrayObject {
+enum eVertexArrayObject {
 	VAOVerticesData,
 	VAOCount
 };
@@ -11,7 +11,7 @@ enum eProgram {
 	ProgramCount
 };
 enum eTexture {
-	NoTexture,		// fixes 0 sized array problem
+	NoTexture,		
 	TextureCount
 };
 
@@ -58,17 +58,17 @@ void initShaderProgram() {
 	glUseProgram(program[QuadScreenProgram]);
 	matModel = mat4(1.0);
 	matView = lookAt(
-		vec3(0.0f, 0.0f, 9.0f),		// the position of your camera, in world space
-		vec3(0.0f, 0.0f, 0.0f),		// where you want to look at, in world space
-		vec3(0.0f, 1.0f, 0.0f));	// upVector, probably glm::vec3(0,1,0), but (0,-1,0) would make you looking upside-down, which can be great too
+		vec3(0.0f, 0.0f, 9.0f),		
+		vec3(0.0f, 0.0f, 0.0f),		
+		vec3(0.0f, 1.0f, 0.0f));	
 	glUniformMatrix4fv(locationMatModel, 1, GL_FALSE, value_ptr(matModel));
 	glUniformMatrix4fv(locationMatView, 1, GL_FALSE, value_ptr(matView));
 	glUniformMatrix4fv(locationMatProjection, 1, GL_FALSE, value_ptr(matProjection));
 }
 
 GLfloat distanceSquare(vec2 p1, vec2 p2) {
-	vec2		delta = p1 - p2;	// delta.xy = p1.xy - p2.xy
-	return dot(delta, delta);		// delta.x * delta.x + delta.y * delta.y
+	vec2		delta = p1 - p2;
+	return dot(delta, delta);		
 }
 GLint getActivePoint(vector<vec2> p, GLfloat sensitivity, vec2 mousePosition) {
 	GLfloat		sensitivitySquare	= sensitivity * sensitivity;
@@ -137,10 +137,10 @@ void framebufferSizeCallback(GLFWwindow* window, int width, int height) {
 			matProjection = ortho(-worldSize * aspectRatio, worldSize * aspectRatio, -worldSize, worldSize, -100.0, 100.0);
 	else
 		matProjection = perspective(
-			radians(45.0f),	// The vertical Field of View, in radians: the amount of "zoom". Think "camera lens". Usually between 90° (extra wide) and 30° (quite zoomed in)
-			aspectRatio,	// Aspect Ratio. Depends on the size of your window. Notice that 4/3 == 800/600 == 1280/960, sounds familiar?
-			0.1f,			// Near clipping plane. Keep as big as possible, or you'll get precision issues.
-			100.0f			// Far clipping plane. Keep as little as possible.
+			radians(45.0f),	
+			aspectRatio,	
+			0.1f,			
+			100.0f			
 		);
 	glUniformMatrix4fv(locationMatProjection, 1, GL_FALSE, value_ptr(matProjection));
 }
