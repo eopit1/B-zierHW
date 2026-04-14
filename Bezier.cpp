@@ -1,3 +1,5 @@
+//EMMANUEL OPIT
+
 enum eVertexArrayObject {
 	VAOVerticesData,
 	VAOCount
