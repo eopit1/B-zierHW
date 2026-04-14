@@ -1,4 +1,5 @@
-//EMMANUEL OPIT
+//Emmanuel Opit
+
 
 enum eVertexArrayObject {
 	VAOVerticesData,
@@ -13,7 +14,7 @@ enum eProgram {
 	ProgramCount
 };
 enum eTexture {
-	NoTexture,		
+	NoTexture,
 	TextureCount
 };
 
@@ -60,9 +61,9 @@ void initShaderProgram() {
 	glUseProgram(program[QuadScreenProgram]);
 	matModel = mat4(1.0);
 	matView = lookAt(
-		vec3(0.0f, 0.0f, 9.0f),		
-		vec3(0.0f, 0.0f, 0.0f),		
-		vec3(0.0f, 1.0f, 0.0f));	
+		vec3(0.0f, 0.0f, 9.0f),
+		vec3(0.0f, 0.0f, 0.0f),
+		vec3(0.0f, 1.0f, 0.0f));
 	glUniformMatrix4fv(locationMatModel, 1, GL_FALSE, value_ptr(matModel));
 	glUniformMatrix4fv(locationMatView, 1, GL_FALSE, value_ptr(matView));
 	glUniformMatrix4fv(locationMatProjection, 1, GL_FALSE, value_ptr(matProjection));
@@ -70,10 +71,10 @@ void initShaderProgram() {
 
 GLfloat distanceSquare(vec2 p1, vec2 p2) {
 	vec2		delta = p1 - p2;
-	return dot(delta, delta);		
+	return dot(delta, delta);
 }
 GLint getActivePoint(vector<vec2> p, GLfloat sensitivity, vec2 mousePosition) {
-	GLfloat		sensitivitySquare	= sensitivity * sensitivity;
+	GLfloat		sensitivitySquare = sensitivity * sensitivity;
 	for (GLint i = 0; i < p.size(); i++)
 		if (distanceSquare(p[i], mousePosition) < sensitivitySquare)
 			return i;
@@ -113,7 +114,7 @@ void DrawBezier()
 	glUniform3f(locationColor, 0, 1, 0);
 	glDrawArrays(GL_LINE_STRIP, 0, curvePoints.size());
 
-	updateBuffer(); 
+	updateBuffer();
 }
 void display(GLFWwindow* window, double currentTime)
 {
@@ -139,10 +140,10 @@ void framebufferSizeCallback(GLFWwindow* window, int width, int height) {
 			matProjection = ortho(-worldSize * aspectRatio, worldSize * aspectRatio, -worldSize, worldSize, -100.0, 100.0);
 	else
 		matProjection = perspective(
-			radians(45.0f),	
-			aspectRatio,	
-			0.1f,			
-			100.0f			
+			radians(45.0f),
+			aspectRatio,
+			0.1f,
+			100.0f
 		);
 	glUniformMatrix4fv(locationMatProjection, 1, GL_FALSE, value_ptr(matProjection));
 }
@@ -203,13 +204,29 @@ void mouseButtonCallback(GLFWwindow* window, int button, int action, int mods) {
 	}
 	if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_RELEASE)
 	{
-		dragged = -1; 
+		dragged = -1;
 	}
 	if (button == GLFW_MOUSE_BUTTON_RIGHT && action == GLFW_PRESS)
 	{
-		if (!verticesData.empty())
+		dvec2 mousePosition;
+		glfwGetCursorPos(window, &mousePosition.x, &mousePosition.y);
+
+		// Normalize mouse coordinates (same as left click)
+		mousePosition.x = mousePosition.x * 2.0f / (GLdouble)windowWidth - 1.0f;
+		mousePosition.y = ((GLdouble)windowHeight - mousePosition.y) * 2.0f / (GLdouble)windowHeight - 1.0f;
+
+		if (windowWidth < windowHeight)
+			mousePosition.y /= aspectRatio;
+		else
+			mousePosition.x *= aspectRatio;
+
+		// Find the point under the cursor
+		int index = getActivePoint(verticesData, 0.1f, mousePosition);
+
+		// Remove ONLY that point
+		if (index != -1)
 		{
-			verticesData.pop_back();
+			verticesData.erase(verticesData.begin() + index);
 			updateBuffer();
 		}
 	}
