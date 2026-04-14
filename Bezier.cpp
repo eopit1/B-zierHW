@@ -211,7 +211,7 @@ void mouseButtonCallback(GLFWwindow* window, int button, int action, int mods) {
 		dvec2 mousePosition;
 		glfwGetCursorPos(window, &mousePosition.x, &mousePosition.y);
 
-		// Normalize mouse coordinates (same as left click)
+		
 		mousePosition.x = mousePosition.x * 2.0f / (GLdouble)windowWidth - 1.0f;
 		mousePosition.y = ((GLdouble)windowHeight - mousePosition.y) * 2.0f / (GLdouble)windowHeight - 1.0f;
 
@@ -220,10 +220,10 @@ void mouseButtonCallback(GLFWwindow* window, int button, int action, int mods) {
 		else
 			mousePosition.x *= aspectRatio;
 
-		// Find the point under the cursor
+		
 		int index = getActivePoint(verticesData, 0.1f, mousePosition);
 
-		// Remove ONLY that point
+		
 		if (index != -1)
 		{
 			verticesData.erase(verticesData.begin() + index);
